@@ -1,0 +1,61 @@
+import heapq
+
+def solve(start):
+    goal = (1, 2, 3, 4, 5, 6, 7, 8, 0)
+
+    def h(state):
+        d = 0
+        for i, x in enumerate(state):
+            if x != 0:
+                j = goal.index(x)
+                d += abs(i // 3 - j // 3) + abs(i % 3 - j % 3)
+        return d
+
+    pq = [(h(start), 0, start, [])]
+    visited = set()
+
+    while pq:
+        f, g, state, path = heapq.heappop(pq)
+
+        if state == goal:
+            return path + [state]
+
+        if state in visited:
+            continue
+        visited.add(state)
+
+        z = state.index(0)
+        r, c = divmod(z, 3)
+
+        for dr, dc in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+            nr, nc = r + dr, c + dc
+
+            if 0 <= nr < 3 and 0 <= nc < 3:
+                nz = nr * 3 + nc
+                new = list(state)
+                new[z], new[nz] = new[nz], new[z]
+                new = tuple(new)
+
+                if new not in visited:
+                    heapq.heappush(
+                        pq, (g + 1 + h(new), g + 1, new, path + [state])
+                    )
+
+    return None
+
+
+print("Enter 9 numbers:")
+start = tuple(map(int, input().split()))
+
+if len(start) == 9 and sorted(start) == list(range(9)):
+    result = solve(start)
+
+    if result:
+        for step, state in enumerate(result):
+            print("\nStep", step)
+            for i in range(0, 9, 3):
+                print(state[i:i + 3])
+    else:
+        print("No solution found")
+else:
+    print("Invalid input! Enter numbers from 0 to 8 exactly once.")
