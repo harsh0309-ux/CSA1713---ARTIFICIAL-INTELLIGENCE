@@ -1,0 +1,49 @@
+from itertools import permutations
+
+word1 = input("Enter first word: ").upper()
+word2 = input("Enter second word: ").upper()
+word3 = input("Enter result word: ").upper()
+
+# Find all unique letters
+letters = set(word1 + word2 + word3)
+letters = list(letters)
+
+if len(letters) > 10:
+    print("Error: More than 10 unique letters.")
+else:
+    found = False
+
+    # Try all possible digit combinations
+    for digits in permutations(range(10), len(letters)):
+        values = dict(zip(letters, digits))
+
+        # First letters cannot be zero
+        if values[word1[0]] == 0 or values[word2[0]] == 0 or values[word3[0]] == 0:
+            continue
+
+        # Convert words into numbers
+        num1 = int("".join(str(values[ch]) for ch in word1))
+        num2 = int("".join(str(values[ch]) for ch in word2))
+        result = int("".join(str(values[ch]) for ch in word3))
+
+        # Check equation
+        if num1 + num2 == result:
+            found = True
+
+            print("\nSolution Found!")
+            print("----------------")
+
+            for letter in sorted(values):
+                print(letter, "=", values[letter])
+
+            print("\n", word1, "=", num1)
+            print(word2, "=", num2)
+            print(word3, "=", result)
+
+            print("\nEquation:")
+            print(num1, "+", num2, "=", result)
+
+            break
+
+    if not found:
+        print("\nNo solution exists.")
