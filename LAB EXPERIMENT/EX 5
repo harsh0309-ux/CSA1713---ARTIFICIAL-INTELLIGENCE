@@ -1,0 +1,89 @@
+from collections import deque
+
+# Get input from user
+M = int(input("Enter number of Missionaries: "))
+C = int(input("Enter number of Cannibals: "))
+
+def is_valid(m, c):
+    # Check limits
+    if m < 0 or c < 0 or m > M or c > C:
+        return False
+
+    # Left side
+    if m > 0 and c > m:
+        return False
+
+    # Right side
+    mr = M - m
+    cr = C - c
+
+    if mr > 0 and cr > mr:
+        return False
+
+    return True
+
+
+def solve():
+    start = (M, C, 'L')
+    goal = (0, 0, 'R')
+
+    # Possible boat movements
+    moves = [
+        (1, 0),
+        (2, 0),
+        (0, 1),
+        (0, 2),
+        (1, 1)
+    ]
+
+    queue = deque()
+    queue.append((start, []))
+
+    visited = set()
+    visited.add(start)
+
+    while queue:
+        state, path = queue.popleft()
+
+        m, c, boat = state
+
+        if state == goal:
+            print("\nSolution Found!\n")
+
+            for i, step in enumerate(path):
+                print("Step", i + 1, ":", step)
+
+            return
+
+        for dm, dc in moves:
+
+            if boat == 'L':
+                new_m = m - dm
+                new_c = c - dc
+                new_boat = 'R'
+                side = "Left -> Right"
+            else:
+                new_m = m + dm
+                new_c = c + dc
+                new_boat = 'L'
+                side = "Right -> Left"
+
+            new_state = (new_m, new_c, new_boat)
+
+            if is_valid(new_m, new_c) and new_state not in visited:
+
+                visited.add(new_state)
+
+                action = (
+                    str(dm) + " Missionary(s), " +
+                    str(dc) + " Cannibal(s) : " + side
+                )
+
+                queue.append(
+                    (new_state, path + [action])
+                )
+
+    print("\nNo solution exists.")
+
+
+solve()
