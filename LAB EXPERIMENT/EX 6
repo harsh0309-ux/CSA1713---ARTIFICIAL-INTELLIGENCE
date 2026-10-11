@@ -1,0 +1,21 @@
+room_A = input("Enter status of Room A (Dirty/Clean): ").lower()
+room_B = input("Enter status of Room B (Dirty/Clean): ").lower()
+rooms = {"A": room_A, "B": room_B}
+current_room = input("Enter starting room (A/B): ").upper()
+while True:
+    print("\nVacuum cleaner is in Room", current_room)
+    if rooms[current_room] == "dirty":
+        print("Room", current_room, "is dirty. Cleaning...")
+        rooms[current_room] = "clean"
+    else:
+        print("Room", current_room, "is already clean.")
+    if current_room == "A":
+        current_room = "B"
+    else:
+        break
+    if rooms["A"] == "clean" and rooms["B"] == "clean":
+        break
+print("\nFinal Room Status:")
+print("Room A:", rooms["A"].capitalize())
+print("Room B:", rooms["B"].capitalize())
+print("Cleaning completed!")
