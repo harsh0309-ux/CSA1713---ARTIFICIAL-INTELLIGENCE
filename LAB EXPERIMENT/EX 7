@@ -1,0 +1,24 @@
+from collections import deque
+graph = {}
+n = int(input("Enter number of nodes: "))
+for i in range(n):
+    node = input("Enter node name: ")
+    neighbors = input(
+        "Enter neighboring nodes separated by spaces: "
+    ).split()
+    graph[node] = neighbors
+start = input("Enter starting node: ")
+visited = []
+queue = deque([start])
+visited.append(start)
+print("BFS Traversal:")
+while queue:
+    node = queue.popleft()
+    print(node, end=" ")
+
+    for neighbor in graph[node]:
+        if neighbor not in visited:
+            visited.append(neighbor)
+            queue.append(neighbor)
+
+print()
