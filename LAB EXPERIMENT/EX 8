@@ -1,0 +1,19 @@
+graph = {}
+n = int(input("Enter number of nodes: "))
+for i in range(n):
+    node = input("Enter node name: ")
+    neighbors = input(
+        "Enter neighboring nodes separated by spaces: "
+    ).split()
+    graph[node] = neighbors
+start = input("Enter starting node: ")
+visited = []
+def dfs(node):
+    if node not in visited:
+        visited.append(node)
+        print(node, end=" ")
+        for neighbor in graph[node]:
+            dfs(neighbor)
+print("DFS Traversal:")
+dfs(start)
+print()
