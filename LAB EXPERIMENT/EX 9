@@ -1,0 +1,31 @@
+n = int(input("Enter number of cities: "))
+print("Enter the distance matrix:")
+dist = []
+for i in range(n):
+    row = list(map(int, input().split()))
+    dist.append(row)
+start = int(input("Enter starting city (0 to n-1): "))
+visited = [False] * n
+visited[start] = True
+path = [start]
+total = 0
+current = start
+while len(path) < n:
+    nearest = -1
+    min_dist = float('inf')
+    for city in range(n):
+        if not visited[city] and dist[current][city] < min_dist:
+            min_dist = dist[current][city]
+            nearest = city
+    if nearest == -1:
+        print("No complete tour is possible.")
+        break
+    visited[nearest] = True
+    path.append(nearest)
+    total += min_dist
+    current = nearest
+if len(path) == n:
+    total += dist[current][start]
+    path.append(start)
+    print("Tour:", " -> ".join(map(str, path)))
+    print("Total distance:", total)
