@@ -1,0 +1,53 @@
+def minimax(stones, is_maximizing):
+    if stones == 0:
+        return -1 if is_maximizing else 1
+    if is_maximizing:
+        best = -float('inf')
+        for move in [1, 2]:
+            if stones >= move:
+                score = minimax(stones - move, False)
+                best = max(best, score)
+        return best
+    else:
+        best = float('inf')
+        for move in [1, 2]:
+            if stones >= move:
+                score = minimax(stones - move, True)
+                best = min(best, score)
+        return best
+def play_game():
+    stones = 10
+    print("Stone-Picking Game")
+    print("There are 10 stones.")
+    print("Each player can remove 1 or 2 stones.")
+    print("The player who removes the last stone wins.")
+    print("You are Player 1; Computer is Player 2.")
+    while stones > 0:
+        print("\nStones remaining:", stones)
+        while True:
+            try:
+                move = int(input("Remove 1 or 2 stones: "))
+                if move in [1, 2] and move <= stones:
+                    break
+                print("Invalid move! Try again.")
+            except ValueError:
+                print("Enter a valid number.")
+        stones -= move
+        if stones == 0:
+            print("You win!")
+            break
+        print("Stones remaining:", stones)
+        best_score = -float('inf')
+        best_move = 1
+        for move in [1, 2]:
+            if move <= stones:
+                score = minimax(stones - move, False)
+                if score > best_score:
+                    best_score = score
+                    best_move = move
+        print("Computer removes", best_move, "stone(s).")
+        stones -= best_move
+        if stones == 0:
+            print("Computer wins!")
+            break
+play_game()
