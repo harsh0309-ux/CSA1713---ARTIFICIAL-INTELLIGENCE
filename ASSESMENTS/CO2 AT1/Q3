@@ -1,0 +1,36 @@
+slots = ["Morning", "Afternoon", "Evening"]
+neighbors = {
+    "W1": {"W2", "W3"},
+    "W2": {"W1", "W3", "W4"},
+    "W3": {"W1", "W2", "W5"},
+    "W4": {"W2", "W5"},
+    "W5": {"W3", "W4"}
+}
+domains = {
+    "W1": ["Morning", "Afternoon", "Evening"],
+    "W2": ["Morning", "Afternoon", "Evening"],
+    "W3": ["Afternoon", "Evening"],
+    "W4": ["Morning", "Afternoon"],
+    "W5": ["Morning", "Afternoon", "Evening"]
+}
+def backtrack(assignment):
+    if len(assignment) == len(domains):
+        return assignment.copy()
+    unassigned = [w for w in domains if w not in assignment]
+    def key(w):
+        legal = [s for s in domains[w]
+                 if all(assignment.get(n) != s for n in neighbors[w])]
+        degree = sum(n not in assignment for n in neighbors[w])
+        return (len(legal), -degree, int(w[1:]))
+    var = min(unassigned, key=key)
+    legal_values = [s for s in domains[var]
+                    if all(assignment.get(n) != s for n in neighbors[var])]
+    for value in legal_values:
+        assignment[var] = value
+        result = backtrack(assignment)
+        if result is not None:
+            return result
+        del assignment[var]
+    return None
+solution = backtrack({})
+print(solution)
