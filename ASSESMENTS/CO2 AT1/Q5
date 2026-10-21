@@ -1,0 +1,27 @@
+def alphabeta(values, alpha, beta, move_name):
+    best = float("inf")
+    examined = []
+    skipped = []
+    for i, value in enumerate(values):
+        examined.append(value)
+        best = min(best, value)
+        beta = min(beta, best)
+        if beta <= alpha:
+            skipped.extend(values[i + 1:])
+            break
+    return best, examined, skipped
+moves = {"M1": [6, 9, 7], "M2": [4, 8, 10], "M3": [7, 5, 12]}
+alpha = float("-inf")
+results = {}
+total_scored = 0
+ 
+for name, values in moves.items():
+    value, examined, skipped = alphabeta(values, alpha, float("inf"), name)
+    results[name] = value
+    total_scored += len(examined)
+    alpha = max(alpha, value)
+    print(name, "value =", value, "examined =", examined, "skipped =", skipped,
+          "alpha =", alpha)
+best_move = max(results, key=results.get)
+print("Positions scored:", total_scored, "of 9")
+print("Chosen move:", best_move, "with value", results[best_move])
