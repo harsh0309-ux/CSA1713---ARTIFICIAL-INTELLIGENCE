@@ -1,0 +1,16 @@
+def minimax(node, depth, maximizing):
+    if depth == 0:
+        return node
+    if maximizing:
+        return max(minimax(child, depth - 1, False) for child in node)
+    return min(minimax(child, depth - 1, True) for child in node)
+tree = [
+    [[4, 7], [8, 2]],
+    [[3, 5], [6, 9]]   
+]
+values = [minimax(branch, 2, False) for branch in tree]
+best_score = max(values)
+best_move = values.index(best_score) + 1
+print("Values of X's first moves:", values)
+print("Best first move: X move", best_move)
+print("Guaranteed score:", best_score)
