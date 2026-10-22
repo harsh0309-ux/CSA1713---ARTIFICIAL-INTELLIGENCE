@@ -1,0 +1,34 @@
+leaves = [3, 5, 6, 9, 1, 2, 0, -1] 
+tree = {
+    'root': ('MAX', ['M1', 'M2']),
+    'M1': ('MIN', ['X1', 'X2']),
+    'M2': ('MIN', ['X3', 'X4']),
+    'X1': ('MAX', [3, 5]),
+    'X2': ('MAX', [6, 9]),
+    'X3': ('MAX', [1, 2]),
+    'X4': ('MAX', [0, -1]),
+}
+values = {}
+def minimax(node):
+    kind, children = tree[node]
+    vals = [c if isinstance(c, int) else minimax(c) for c in children]
+    values[node] = max(vals) if kind == 'MAX' else min(vals)
+    return values[node]
+minimax('root')
+for n in ['X1', 'X2', 'X3', 'X4', 'M1', 'M2', 'root']:
+    print(f"{n:5s} ({tree[n][0]}) = {values[n]}")
+best = max(['M1', 'M2'], key=lambda n: values[n])
+print("Best first move for MAX ->", best, "with value", values[best])
+board = ['X', 'O', ' ',
+         'X', ' ', ' ',
+         'O', ' ', ' ']
+lines = [(0,1,2),(3,4,5),(6,7,8),(0,3,6),(1,4,7),(2,5,8),(0,4,8),(2,4,6)]
+def evaluate(b):
+    open_x = [l for l in lines if all(b[i] != 'O' for i in l)]
+    open_o = [l for l in lines if all(b[i] != 'X' for i in l)]
+    return open_x, open_o, len(open_x) - len(open_o)
+ox, oo, E = evaluate(board)
+print("Lines open for X:", len(ox), ox)
+print("Lines open for O:", len(oo), oo)
+print("E =", len(ox), "-", len(oo), "=", E)
+
