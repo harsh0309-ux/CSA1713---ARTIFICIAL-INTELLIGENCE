@@ -1,0 +1,35 @@
+leaves = [8, 6, 5, 7, 2, 9, 4, 3, 6, 1, 5, 2, 9, 7, 3, 4]
+INF = float('inf')
+count = {'ab': 0, 'mm': 0}
+def minimax(depth, idx, maximizing):
+    if depth == 4:
+        count['mm'] += 1
+        return leaves[idx]
+    vals = [minimax(depth + 1, idx * 2 + i, not maximizing) for i in range(2)]
+    return max(vals) if maximizing else min(vals)
+def alphabeta(depth, idx, maximizing, alpha, beta, name='root'):
+    if depth == 4:
+        count['ab'] += 1
+        print(f"  leaf #{idx+1:2d} = {leaves[idx]}")
+        return leaves[idx]
+    kind = 'MAX' if maximizing else 'MIN'
+    print(f"{'  '*depth}visit {name} ({kind}) alpha={alpha}, beta={beta}")
+    value = -INF if maximizing else INF
+    for i in range(2):
+        child = alphabeta(depth + 1, idx * 2 + i, not maximizing, alpha, beta, f"{name}.{i+1}")
+        if maximizing:
+            value = max(value, child); alpha = max(alpha, value)
+        else:
+            value = min(value, child); beta = min(beta, value)
+        if alpha >= beta:
+            if i == 0:
+                print(f"{'  '*depth}  PRUNE remaining children of {name} (alpha={alpha} >= beta={beta})")
+            break
+    print(f"{'  '*depth}{name} returns {value}")
+    return value
+root = alphabeta(0, 0, True, -INF, INF)
+mm = minimax(0, 0, True)
+print("\nAlpha-beta root value:", root, "| leaves evaluated:", count['ab'])
+print("Minimax root value   :", mm, "| leaves evaluated:", count['mm'])
+print("Same root value:", root == mm)
+
