@@ -1,0 +1,40 @@
+variables = ['WA', 'NT', 'SA', 'Q', 'NSW', 'V']
+colors = ['R', 'G', 'B']
+edges = [('WA','NT'),('WA','SA'),('NT','SA'),('NT','Q'),('SA','Q'),
+         ('SA','NSW'),('SA','V'),('Q','NSW'),('NSW','V')]
+nbrs = {v: set() for v in variables}
+for a, b in edges:
+    nbrs[a].add(b); nbrs[b].add(a)
+def select_var(assign, dom):
+    unassigned = [v for v in variables if v not in assign]
+    return min(unassigned, key=lambda v: (len(dom[v]),
+               -sum(1 for n in nbrs[v] if n not in assign), variables.index(v)))
+def backtrack(assign, dom, log):
+    if len(assign) == len(variables):
+        return assign
+    var = select_var(assign, dom)
+    for val in [c for c in colors if c in dom[var]]:       
+        new_dom = {v: list(d) for v, d in dom.items()}
+        new_dom[var] = [val]
+        ok = True
+        for n in nbrs[var]:                                 
+            if n not in assign and val in new_dom[n]:
+                new_dom[n].remove(val)
+                if not new_dom[n]:
+                    ok = False
+        step = len(log) + 1
+        rest = {v: ''.join(new_dom[v]) for v in variables if v not in assign and v != var}
+        log.append(f"{step}. {var} = {val}   domains: {rest}")
+        print(log[-1])
+        if ok:
+            res = backtrack({**assign, var: val}, new_dom, log)
+            if res:
+                return res
+        print(f"   backtrack from {var}={val}")
+    return None
+dom = {v: list(colors) for v in variables}
+print("Initial domains:", {v: ''.join(d) for v, d in dom.items()})
+sol = backtrack({}, dom, [])
+print("Final colouring:", sol)
+print("Valid:", all(sol[a] != sol[b] for a, b in edges))
+
