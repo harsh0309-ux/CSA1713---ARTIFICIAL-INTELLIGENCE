@@ -1,0 +1,59 @@
+import heapq
+graph = {
+    'S': {'A': 2, 'B': 3},'A': {'S': 2, 'C': 4, 'D': 7},
+    'B': {'S': 3, 'D': 2, 'E': 6},
+    'C': {'A': 4, 'G': 6},
+    'D': {'A': 7, 'B': 2, 'G': 3},
+    'E': {'B': 6, 'G': 2},
+    'G': {'C': 6, 'D': 3, 'E': 2},
+}
+h = {'S': 7, 'A': 8, 'B': 4, 'C': 5, 'D': 3, 'E': 2, 'G': 0}
+def astar(start, goal):
+    open_list = [(h[start], 0, start, [start])]
+    best_g = {start: 0}
+    closed = set()
+    step = 0
+    while open_list:
+        f, g, node, path = heapq.heappop(open_list)
+        if node in closed:
+            continue
+        step += 1
+        closed.add(node)
+        if node == goal:
+            print(f"Step {step}: expand {node} -> GOAL reached (f={f})")
+            return path, g
+        for nb, c in graph[node].items():
+            ng = g + c
+            if nb not in closed and ng < best_g.get(nb, float('inf')):
+                best_g[nb] = ng
+                heapq.heappush(open_list, (ng + h[nb], ng, nb, path + [nb]))
+        live = {}
+        for f2, g2, n, _ in open_list:
+            if n not in closed and best_g[n] == g2:
+                live[n] = (g2, h[n], f2)
+        show = sorted(live.items(), key=lambda x: (x[1][2], x[0]))
+        print(f"Step {step}: expand {node:2s} open = {[f'{n}:{a}+{b}={c}' for n, (a, b, c) in show]}")
+    return None, None
+def true_cost(start, goal='G'):
+    dist = {n: float('inf') for n in graph}
+    dist[start] = 0
+    pq = [(0, start)]
+    while pq:
+        d, u = heapq.heappop(pq)
+        if d > dist[u]:
+            continue
+        for v, c in graph[u].items():
+            if d + c < dist[v]:
+                dist[v] = d + c
+                heapq.heappush(pq, (dist[v], v))
+    return dist[goal]
+print("=== A* Search ===")
+p, c = astar('S', 'G')
+print("Path:", ' -> '.join(p), "| cost =", c)
+ 
+print("\n=== Admissibility check ===")
+print(f"{'Node':5s}{'h(n)':6s}{'h*(n)':7s}h<=h*?")
+for n in 'SABCDEG':
+    t = true_cost(n)
+    print(f"{n:5s}{h[n]:<6d}{t:<7d}{h[n] <= t}")
+
