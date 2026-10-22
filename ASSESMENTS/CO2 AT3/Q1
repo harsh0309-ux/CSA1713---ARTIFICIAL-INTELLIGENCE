@@ -1,0 +1,35 @@
+import heapq
+graph = {
+    'S': {'A': 2, 'B': 3},
+    'A': {'S': 2, 'C': 4, 'D': 7},
+    'B': {'S': 3, 'D': 2, 'E': 6},
+    'C': {'A': 4, 'G': 6},
+    'D': {'A': 7, 'B': 2, 'G': 3},
+    'E': {'B': 6, 'G': 2},
+    'G': {'C': 6, 'D': 3, 'E': 2},
+}
+h = {'S': 7, 'A': 8, 'B': 4, 'C': 5, 'D': 3, 'E': 2, 'G': 0}
+def greedy(start, goal):
+    open_list = [(h[start], start, [start], 0)]
+    closed = set()
+    step = 0
+    while open_list:
+        hn, node, path, g = heapq.heappop(open_list)
+        if node in closed:
+            continue
+        step += 1
+        closed.add(node)
+        if node == goal:
+            print(f"Step {step}: expand {node} -> GOAL reached")
+            return path, g
+        for nb, c in graph[node].items():
+            if nb not in closed:
+                heapq.heappush(open_list, (h[nb], nb, path + [nb], g + c))
+        show = sorted({(n, hh) for hh, n, _, _ in open_list if n not in closed}, key=lambda x: (x[1], x[0]))
+        print(f"Step {step}: expand {node:2s} open = {[f'{n}:{hh}' for n, hh in show]}")
+    return None, None 
+print("=== Greedy Best-First Search ===")
+p, c = greedy('S', 'G')
+print("Path:", ' -> '.join(p), "| cost =", c)
+
+
