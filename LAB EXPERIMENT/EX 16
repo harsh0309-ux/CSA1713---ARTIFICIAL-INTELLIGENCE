@@ -1,0 +1,12 @@
+
+person('Arun', '10-05-2003').
+person('Priya', '15-08-2004').
+person('Kumar', '20-12-2002').
+person('Ravi', '25-03-2003').
+
+% Query DOB using name
+show_dob(Name) :-
+    person(Name, DOB),
+    write('Date of Birth: '),
+    write(DOB),
+    nl.
