@@ -1,0 +1,18 @@
+
+% Initial facts
+sunny.
+high_temperature.
+
+% Rules
+go_outside :-
+    sunny.
+
+wear_cotton :-
+    high_temperature.
+
+enjoy_day :-
+    go_outside,
+    wear_cotton.
+
+% Backward chaining is performed
+% automatically by Prolog.
