@@ -1,0 +1,30 @@
+
+% Declare dynamic predicate
+:- dynamic fact/1.
+
+% Initial facts
+fact(sunny).
+fact(high_temperature).
+
+% Rules
+rule(go_outside) :-
+    fact(sunny).
+
+rule(wear_cotton) :-
+    fact(high_temperature).
+
+rule(enjoy_day) :-
+    fact(go_outside),
+    fact(wear_cotton).
+
+% Forward chaining
+forward :-
+    rule(X),
+    \+ fact(X),
+    assertz(fact(X)),
+    write('New fact derived: '),
+    write(X), nl,
+    forward.
+
+forward :-
+    write('Forward chaining completed.'), nl.
