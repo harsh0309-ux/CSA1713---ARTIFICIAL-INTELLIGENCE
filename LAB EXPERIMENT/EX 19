@@ -1,0 +1,31 @@
+
+% Planet database
+
+planet(mercury, terrestrial).
+planet(venus, terrestrial).
+planet(earth, terrestrial).
+planet(mars, terrestrial).
+planet(jupiter, gas_giant).
+planet(saturn, gas_giant).
+planet(uranus, ice_giant).
+planet(neptune, ice_giant).
+
+% Planet order from the Sun
+position(mercury, 1).
+position(venus, 2).
+position(earth, 3).
+position(mars, 4).
+position(jupiter, 5).
+position(saturn, 6).
+position(uranus, 7).
+position(neptune, 8).
+
+% Queries
+terrestrial_planet(X) :-
+    planet(X, terrestrial).
+
+gas_planet(X) :-
+    planet(X, gas_giant).
+
+ice_planet(X) :-
+    planet(X, ice_giant).
