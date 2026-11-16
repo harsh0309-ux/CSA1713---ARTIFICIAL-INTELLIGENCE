@@ -1,0 +1,19 @@
+
+% Diet Recommendations Based on Disease
+
+diet(diabetes, 'Avoid sugary foods and eat whole grains').
+diet(blood_pressure, 'Reduce salt and eat fruits and vegetables').
+diet(obesity, 'Eat low-calorie foods and avoid oily foods').
+diet(anemia, 'Eat iron-rich foods like spinach and beans').
+diet(heart_disease, 'Avoid fatty foods and eat fiber-rich foods').
+
+% Rule to suggest diet
+
+suggest_diet(Disease) :-
+    diet(Disease, Food),
+    write('Recommended Diet: '),
+    write(Food).
+
+suggest_diet(Disease) :-
+    \+ diet(Disease, _),
+    write('No diet recommendation available').
