@@ -1,0 +1,14 @@
+
+from sklearn.decomposition import PCA
+
+# Dataset
+X = [[2, 4, 6], [3, 5, 7],
+     [4, 6, 8], [5, 7, 9]]
+
+# Apply PCA
+pca = PCA(n_components=1)
+
+result = pca.fit_transform(X)
+
+print("Reduced Data:")
+print(result)
