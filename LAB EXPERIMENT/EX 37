@@ -1,0 +1,24 @@
+
+import pandas as pd
+from sklearn.metrics.pairwise import cosine_similarity
+
+# User-item rating matrix
+data = {
+    'Movie1': [5, 4, 0],
+    'Movie2': [4, 5, 0],
+    'Movie3': [0, 0, 5]
+}
+
+df = pd.DataFrame(data, index=['User1', 'User2', 'User3'])
+
+# Calculate user similarity
+similarity = cosine_similarity(df)
+
+# Find similar user
+user = 0
+similar_user = similarity[user].argsort()[-2]
+
+# Recommend movie
+for movie in df.columns:
+    if df.iloc[user][movie] == 0 and df.iloc[similar_user][movie] > 0:
+        print("Recommended Movie:", movie)
