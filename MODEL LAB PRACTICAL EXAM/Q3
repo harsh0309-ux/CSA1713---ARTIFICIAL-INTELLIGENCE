@@ -1,0 +1,11 @@
+
+patient(rahul, 25, fever, dr_smith).
+patient(riya, 30, cold, dr_john).
+patient(raj, 40, fever, dr_smith).
+patient(anu, 22, cough, dr_john).
+
+disease(D, P) :-
+    patient(P, _, D, _).
+
+doctor(D, P) :-
+    patient(P, _, _, D).
