@@ -1,0 +1,22 @@
+
+graph = {
+    'S': [['A', 'B'], ['C']],
+    'A': [['D', 'E']],
+    'C': [['F']]
+}
+
+def ao_star(node):
+    if node not in graph:
+        return 0
+
+    costs = []
+    for path in graph[node]:
+        cost = sum(1 + ao_star(child) for child in path)
+        costs.append((cost, path))
+
+    best = min(costs)
+    print(node, "->", best[1])
+    return best[0]
+
+print("Optimal Solution:")
+ao_star('S')
