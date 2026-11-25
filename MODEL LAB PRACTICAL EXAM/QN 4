@@ -1,0 +1,11 @@
+
+
+bird(parrot).
+healthy(parrot).
+
+
+can_fly(X) :-
+    bird(X).
+
+
+?- can_fly(parrot).
